@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeContextProvider } from "@/context/ThemeContext";
+import NavBar from "@/components/navbar/NavBar";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["600"],
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Curious Expolorer",
@@ -14,7 +18,7 @@ function Providers({ children }: any) {
   return <ThemeContextProvider>{children}</ThemeContextProvider>;
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -22,7 +26,10 @@ export default function RootLayout({
   return (
     <Providers>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={poppins.className}>
+          <NavBar />
+          {children}
+        </body>
       </html>
     </Providers>
   );
