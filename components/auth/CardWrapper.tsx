@@ -10,19 +10,23 @@ import {
 import AuthProviders from "./AuthProviders";
 import { Button } from "../ui/button";
 
+import { useRouter } from "next/navigation";
+
 interface CardWrapperProps {
   headerLabel: string;
   children: React.ReactNode;
   backButtonLabel: string;
-  bacButtonkUrl?: string;
+  backButtonUrl?: string;
 }
 
 function CardWrapper({
   headerLabel,
   children,
-  bacButtonkUrl,
+  backButtonUrl,
   backButtonLabel,
 }: CardWrapperProps) {
+  const router = useRouter();
+
   return (
     <div className="w-full flex items-center justify-center">
       <Card className="w-1/3">
@@ -34,7 +38,11 @@ function CardWrapper({
           <AuthProviders />
         </CardFooter>
         <CardFooter>
-          <Button variant="link" className="w-fit m-auto">
+          <Button
+            variant="link"
+            className="w-fit m-auto"
+            onClick={() => router.push(backButtonUrl || "/")}
+          >
             {backButtonLabel}
           </Button>
         </CardFooter>

@@ -1,46 +1,61 @@
 "use client";
 import React from "react";
-
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Button } from "../ui/button";
-
+import CardWrapper from "@/components/auth/CardWrapper";
+import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
-  FormLabel,
   FormField,
   FormItem,
+  FormLabel,
+  FormControl,
   FormMessage,
 } from "../ui/form";
+import { Input } from "@/components/ui/input";
 
-import { Input } from "../ui/input";
-import { LoginSchema } from "@/validation/schemas";
+import * as z from "zod";
+import { RegisterSchema } from "@/validation/schemas";
 import { useForm } from "react-hook-form";
-import CardWrapper from "./CardWrapper";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-function LoginForm() {
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+function RegisterForm() {
+
+  
+
+  const handleSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    console.log(values);
+  };
+
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
-  };
-
   return (
     <CardWrapper
       headerLabel="Welcome back !"
-      backButtonLabel="Don't have an account ?"
-      backButtonUrl="/auth/register"
+      backButtonLabel="Already have an account ?"
+      backButtonUrl="/auth/login"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="email"
@@ -70,7 +85,7 @@ function LoginForm() {
           />
           <div className="flex items-center justify-center">
             <Button type="submit" className="w-full">
-              Login
+              Create an account
             </Button>
           </div>
         </form>
@@ -79,4 +94,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;

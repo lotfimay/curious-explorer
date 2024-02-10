@@ -5,7 +5,7 @@ import { Switch } from "../ui/switch";
 
 function ThemeSwitcher({ className }: { className?: string }) {
   const { theme, toggleTheme } = useThemeContext();
-  return <Switch className={className} />;
+  return <Switch className={className} onClick={toggleTheme} />;
 }
 
 export default ThemeSwitcher;
