@@ -21,7 +21,6 @@ import { useForm } from "react-hook-form";
 import CardWrapper from "./CardWrapper";
 
 function LoginForm() {
-  
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -50,7 +49,7 @@ function LoginForm() {
                 <FormControl>
                   <Input placeholder="johndoe@example.com" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -64,7 +63,7 @@ function LoginForm() {
                 <FormControl>
                   <Input placeholder="123455" type="password" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />

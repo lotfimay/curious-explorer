@@ -6,9 +6,9 @@ import ThemeSwitcher from "./ThemeSwitcher";
 function Links() {
   return (
     <ul className="flex items-center justify-between font-semibold gap-4">
-        <li>
-            <ThemeSwitcher className="color-blue-500"/>
-        </li>
+      <li>
+        <ThemeSwitcher/>
+      </li>
       <li>
         <Link href="/">HomePage</Link>
       </li>
