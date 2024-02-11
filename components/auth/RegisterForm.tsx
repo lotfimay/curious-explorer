@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useTransition } from "react";
 import CardWrapper from "@/components/auth/CardWrapper";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,13 +16,25 @@ import * as z from "zod";
 import { RegisterSchema } from "@/validation/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FormError from "../FormError";
+import { register } from "@/actions/auth";
+import FormSuccess from "../FormSuccess";
 
 function RegisterForm() {
-
-  
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
 
   const handleSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    console.log(values);
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      register(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
   };
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -49,7 +61,11 @@ function RegisterForm() {
               <FormItem>
                 <FormLabel>name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input
+                    placeholder="John Doe"
+                    {...field}
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
@@ -63,7 +79,11 @@ function RegisterForm() {
               <FormItem>
                 <FormLabel>email</FormLabel>
                 <FormControl>
-                  <Input placeholder="johndoe@example.com" {...field} />
+                  <Input
+                    placeholder="johndoe@example.com"
+                    {...field}
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
@@ -77,14 +97,21 @@ function RegisterForm() {
               <FormItem>
                 <FormLabel>password</FormLabel>
                 <FormControl>
-                  <Input placeholder="123455" type="password" {...field} />
+                  <Input
+                    placeholder="123455"
+                    type="password"
+                    {...field}
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <div className="flex items-center justify-center">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isPending}>
               Create an account
             </Button>
           </div>

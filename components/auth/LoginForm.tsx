@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 
+import { useState, useTransition } from "react";
+
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -19,8 +21,15 @@ import { Input } from "../ui/input";
 import { LoginSchema } from "@/validation/schemas";
 import { useForm } from "react-hook-form";
 import CardWrapper from "./CardWrapper";
+import FormError from "@/components/FormError";
+import FormSuccess from "@/components/FormSuccess";
+import { login } from "@/actions/auth";
 
 function LoginForm() {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -30,7 +39,17 @@ function LoginForm() {
   });
 
   const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
+    console.log("form submitted");
+
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data?.error);
+        //setSuccess(data?.success);
+      });
+    });
   };
 
   return (
@@ -48,7 +67,7 @@ function LoginForm() {
               <FormItem>
                 <FormLabel>email</FormLabel>
                 <FormControl>
-                  <Input placeholder="johndoe@example.com" {...field} />
+                  <Input placeholder="johndoe@example.com" {...field} disabled={isPending} />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
@@ -62,14 +81,16 @@ function LoginForm() {
               <FormItem>
                 <FormLabel>password</FormLabel>
                 <FormControl>
-                  <Input placeholder="123455" type="password" {...field} />
+                  <Input placeholder="123455" type="password" {...field} disabled={isPending} />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <div className="flex items-center justify-center">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isPending}>
               Login
             </Button>
           </div>
