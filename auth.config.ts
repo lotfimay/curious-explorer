@@ -1,4 +1,5 @@
 import  Credentials from "next-auth/providers/credentials";
+import  Github from "next-auth/providers/github"
 
 import bcrypt from "bcryptjs";
 
@@ -9,6 +10,11 @@ import { findUserByEmail } from "./data/user";
 
 export default {
   providers: [
+    Github({
+      clientId : process.env.GITHUB_CLIENT_ID,
+      clientSecret : process.env.GITHUB_SECRET,
+    }),
+    
     Credentials({
       async authorize(credentials){
           try{
