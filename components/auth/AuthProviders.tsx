@@ -9,7 +9,12 @@ import { signIn } from "next-auth/react";
 function AuthProviders() {
   return (
     <div className="flex items-center w-full gap-x-2">
-      <Button size="lg" className="w-full" variant="ghost">
+      <Button
+        size="lg"
+        className="w-full"
+        variant="ghost"
+        onClick={async () => await signIn("google")}
+      >
         <FcGoogle className="h-5 w-5" />
       </Button>
       <Button

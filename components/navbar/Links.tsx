@@ -2,7 +2,9 @@ import React from "react";
 
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import UserMenu from "../auth/UserMenu";
+import { userMenuItems } from "@/constants";
 
 async function Links() {
   const session = await auth();
@@ -25,17 +27,11 @@ async function Links() {
           <Link href="/auth/login">Login</Link>
         </li>
       ) : (
-        <li>
-          <form
-            action={async () => {
-              "use server";
-              await signOut();
-            }}
-            className="cursor-pointer"
-          >
-            <button type="submit">Logout</button>
-          </form>
-        </li>
+        <UserMenu
+          label="Account"
+          items={userMenuItems}
+          userImage={session.user.image}
+        />
       )}
     </ul>
   );

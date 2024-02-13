@@ -25,7 +25,16 @@ import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { login } from "@/actions/auth";
 
+import { useSearchParams } from "next/navigation";
+
 function LoginForm() {
+  const searchParams = useSearchParams();
+
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider!"
+      : "";
+
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
@@ -67,7 +76,11 @@ function LoginForm() {
               <FormItem>
                 <FormLabel>email</FormLabel>
                 <FormControl>
-                  <Input placeholder="johndoe@example.com" {...field} disabled={isPending} />
+                  <Input
+                    placeholder="johndoe@example.com"
+                    {...field}
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
@@ -81,13 +94,18 @@ function LoginForm() {
               <FormItem>
                 <FormLabel>password</FormLabel>
                 <FormControl>
-                  <Input placeholder="123455" type="password" {...field} disabled={isPending} />
+                  <Input
+                    placeholder="123455"
+                    type="password"
+                    {...field}
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
-          <FormError message={error} />
+          <FormError message={urlError || error} />
           <FormSuccess message={success} />
           <div className="flex items-center justify-center">
             <Button type="submit" className="w-full" disabled={isPending}>
