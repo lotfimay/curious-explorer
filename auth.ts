@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt"
 
 import authConfig from "@/auth.config"
 import { db } from "./lib/db"
+import { findUserByEmail, findUserById } from "./data/user"
 
 declare module "next-auth" {
 
@@ -53,19 +54,28 @@ export const {
       }
     },
     callbacks : {
+      async signIn({user , account}){
+
+        if(account?.provider !== "credentials") return true;
+
+        const existingdUser = user.id ? await findUserById(user.id) : null;
+
+        if(!existingdUser) return false;
+
+        if(!existingdUser.emailVerified) return false;
+        
+        return true;
+      },
       jwt({token}){
-        console.log({
-          fromJwt : token
-        });
         token.role = "ADMIN";
         return token;
       },
       session({session , token}){
-        console.log({
-          fromSession : session
-        });
-        if(token.role && session.user) session.user.role = "ADMIN";
-        if(token.sub && session.user) session.user.id = token.sub;
+
+        if (token.sub && session.user) {
+          session.user.id = token.sub;
+        }
+
         return session;
       }
 

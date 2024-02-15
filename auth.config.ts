@@ -39,7 +39,6 @@ export default {
     
             return null;
           }catch(error){
-              console.error(error);
               return null;
           }
       }

@@ -11,7 +11,7 @@ export function findUserByEmail(email : string){
       });
       return user;
     }catch(error){
-      return null;
+      throw error;
     }
   }
   
@@ -25,6 +25,6 @@ export function findUserById(id : string){
       });
       return user;
     }catch(error){
-      return null;
+      throw error;
     }
   }
