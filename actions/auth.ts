@@ -107,3 +107,44 @@ export async function register(values : z.infer<typeof RegisterSchema>){
     }
 
 }
+
+
+export async function validateEmail(token : string){
+
+        try{
+            
+            const validationToken = await db.verificationToken.findUnique({
+                where : {
+                    token : token
+                }
+            });
+
+            if(!validationToken) return {error : "Invalid token !"}
+
+            const currentDate = new Date();
+
+            if(validationToken.expires < currentDate) return {error: "Expired token !"}
+
+            await db.$transaction([
+                db.user.update({
+                    where : {
+                        email : validationToken.email
+                    },
+                    data : {
+                        emailVerified : new Date()
+                    }
+                }),
+                db.verificationToken.delete({
+                    where : {
+                        token : token
+                    }
+                })
+            ])
+
+            return {success : "Email verified successfully !"}
+
+        }catch(error){
+            return {error : "Something went wrong !"}
+        }
+
+}

@@ -4,7 +4,8 @@
  */
 
 export const publicRoutes : string [] = [
-    "/"
+    "/",
+    "/auth/new-verification",
 ]
 
 export const authRoutes : string [] = [
