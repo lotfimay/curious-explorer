@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+
+.links-container{
+
+}
+
+.links{
+    display: flex;
+    /* background-color: red; */
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+
