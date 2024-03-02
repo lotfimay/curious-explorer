@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { ThemeContextProvider, ThemeProvider } from "@/context/ThemeContext";
+import { ThemeContextProvider } from "@/context/ThemeContext";
 import NavBar from "@/components/navbar/NavBar";
-import Footer from "@/components/Footer";
 
 const poppins = Poppins({
   weight: ["600"],
@@ -25,20 +24,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={poppins.className}>
-        <ThemeContextProvider>
-          <ThemeProvider>
-            <div className="container">
-              <div className="wrapper">
-                <NavBar />
-                {children}
-                <Footer />
-              </div>
-            </div>
-          </ThemeProvider>
-        </ThemeContextProvider>
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body className={poppins.className}>
+          <NavBar />
+          {children}
+        </body>
+      </html>
+    </Providers>
   );
 }

@@ -9,6 +9,5 @@ export function useThemeContext(){
     if(!themeContext){
         throw Error("The theme value should be used inside a theme provider")
     }
-    console.log(themeContext.theme)
     return themeContext;
 }

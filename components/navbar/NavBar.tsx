@@ -1,39 +1,22 @@
 import React from "react";
-import Link from "next/link";
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
-import { auth } from "@/auth";
-import styles from "./navbar.module.css";
-async function NavBar() {
-  const session = await auth();
+import ThemeSwitcher from "./ThemeSwitcher";
 
+import SocialMedia from "@/components/navbar/SocialMedia";
+
+import Links from "./Links";
+
+function NavBar() {
   return (
-    <nav>
-      <ul className={styles.container}>
+    <nav className="p-4 m-8">
+      <ul className="flex items-center justify-between">
+        {/* <li>
+          <SocialMedia />
+        </li> */}
         <li>
-          <h1 className="">Curious Explorer</h1>
+          <h1 className="font-semibold">Curious Explorer</h1>
         </li>
-        <li className={styles["links-container"]}>
-          <ul className={styles.links}>
-            <li>
-              <ThemeSwitcher />
-            </li>
-            <li>
-              <Link href="/">HomePage</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
-            <li>
-              <Link href="/about">About</Link>
-            </li>
-            {session === null ? (
-              <li>
-                <Link href="/auth/login">Login</Link>
-              </li>
-            ) : (
-              <p>Logout</p>
-            )}
-          </ul>
+        <li>
+          <Links />
         </li>
       </ul>
     </nav>

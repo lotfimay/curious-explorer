@@ -1,9 +1,13 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { useThemeContext } from "@/hooks/useThemeContext";
-
-import Featured from "@/components/Featured";
+import Link from "next/link";
 export default function Home() {
   const { theme, toggleTheme } = useThemeContext();
 
-  return <Featured />;
+  return (
+    <>
+      <Button>Login</Button>
+    </>
+  );
 }
