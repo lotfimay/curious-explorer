@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { ThemeContextProvider } from "@/context/ThemeContext";
+import { ThemeContextProvider, ThemeProvider } from "@/context/ThemeContext";
 import NavBar from "@/components/navbar/NavBar";
 
 const poppins = Poppins({
@@ -24,13 +24,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={poppins.className}>
+    <html lang="en">
+      <ThemeContextProvider>
+        <ThemeProvider className={poppins.className}>
           <NavBar />
           {children}
-        </body>
-      </html>
-    </Providers>
+        </ThemeProvider>
+      </ThemeContextProvider>
+    </html>
   );
 }

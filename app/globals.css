@@ -1,11 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "tailwindcss/utilities";
+
+
  
 body,
 html,
 :root{
-  height: 100%;
+  height: 100vh;
 }
 
 @layer base {
@@ -80,3 +84,5 @@ html,
     @apply bg-background text-foreground;
   }
 }
+
+
