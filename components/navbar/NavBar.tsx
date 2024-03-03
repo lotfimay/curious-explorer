@@ -1,19 +1,15 @@
 import React from "react";
-import ThemeSwitcher from "./ThemeSwitcher";
-
-import SocialMedia from "@/components/navbar/SocialMedia";
-
 import Links from "./Links";
+import Link from "next/link";
 
-function NavBar() {
+function NavBar({ className }: { className?: string }) {
   return (
-    <nav className="p-4 m-8">
+    <nav className={`${className}`}>
       <ul className="flex items-center justify-between">
-        {/* <li>
-          <SocialMedia />
-        </li> */}
         <li>
-          <h1 className="font-semibold">Curious Explorer</h1>
+          <Link href="/" className="font-bold text-xl">
+            Curious Explorer
+          </Link>
         </li>
         <li>
           <Links />

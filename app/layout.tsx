@@ -27,8 +27,10 @@ export default async function RootLayout({
     <html lang="en">
       <ThemeContextProvider>
         <ThemeProvider className={poppins.className}>
-          <NavBar />
-          {children}
+          <div className="px-10">
+            <NavBar className="m-8" />
+            {children}
+          </div>
         </ThemeProvider>
       </ThemeContextProvider>
     </html>

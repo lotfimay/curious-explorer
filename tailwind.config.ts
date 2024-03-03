@@ -48,6 +48,10 @@ const config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
+        soft : {
+            DEFAULT : "hsl(var(--soft))",
+            foreground : "hsl(var(--soft))"
+        },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
