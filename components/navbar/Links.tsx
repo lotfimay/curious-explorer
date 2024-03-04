@@ -9,12 +9,9 @@ import { userMenuItems } from "@/constants";
 async function Links() {
   const session = await auth();
   return (
-    <ul className="flex items-center justify-between font-semibold gap-4">
+    <ul className="flex items-center justify-between font-semibold gap-10">
       <li className="flex items-center justify-center">
         <ThemeSwitcher />
-      </li>
-      <li>
-        <Link href="/">HomePage</Link>
       </li>
       <li>
         <Link href="/contact">Contact</Link>

@@ -7,7 +7,7 @@ function NavBar({ className }: { className?: string }) {
     <nav className={`${className}`}>
       <ul className="flex items-center justify-between">
         <li>
-          <Link href="/" className="font-bold text-xl">
+          <Link href="/" className="font-bold text-3xl">
             Curious Explorer
           </Link>
         </li>

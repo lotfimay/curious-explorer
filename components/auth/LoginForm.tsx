@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { useState, useTransition } from "react";
 
@@ -29,6 +29,7 @@ import { useSearchParams } from "next/navigation";
 
 function LoginForm() {
   const searchParams = useSearchParams();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
@@ -47,9 +48,12 @@ function LoginForm() {
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log("form submitted");
+  useEffect(() => {
+    inputRef?.current?.focus();
+  }, []);
 
+  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
+    
     setError("");
     setSuccess("");
 
@@ -80,6 +84,7 @@ function LoginForm() {
                     placeholder="johndoe@example.com"
                     {...field}
                     disabled={isPending}
+                    ref={inputRef}
                   />
                 </FormControl>
                 <FormMessage className="text-red-500" />
