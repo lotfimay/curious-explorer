@@ -49,7 +49,7 @@ interface BlogListProps {
 function BlogList({ blogs, className }: BlogListProps) {
   return (
     <ul className={`${className} flex flex-col gap-2`}>
-      {blogs && blogs.map((blog) => <Blog {...blog} />)}
+      {blogs && blogs.map((blog) => <Blog {...blog} key={blog.id.toString()} />)}
     </ul>
   );
 }
