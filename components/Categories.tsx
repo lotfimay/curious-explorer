@@ -3,17 +3,30 @@ import React from "react";
 
 import Image from "next/image";
 
+import { db } from "@/lib/db";
+import { categoryColors } from "@/constants";
+
+const fetchCategories = async () => {
+  try {
+    const categories = await db.category.findMany();
+    return categories;
+  } catch (error) {
+    console.log("Something went wrong !");
+  }
+};
+
 interface CategoRyItemProps {
   title: string;
   image: string;
   bgColor?: string;
 }
 
-const CategoryItem = ({ title, image, bgColor }: CategoRyItemProps) => {
+const CategoryItem = ({ title, image }: CategoRyItemProps) => {
+  const bgColor = categoryColors[title.toLowerCase()] || "#ff795736";
   return (
     <Link
       href="/"
-      className={`flex-1 flex items-center justify-center rounded-md gap-1 py-2 px-1`}
+      className={`flex-1 flex items-center justify-center bg-[${bgColor}] rounded-md gap-1 py-2 px-1`}
       style={{ backgroundColor: bgColor }}
     >
       <div className="relative w-[32px] h-[32px]">
@@ -24,51 +37,22 @@ const CategoryItem = ({ title, image, bgColor }: CategoRyItemProps) => {
   );
 };
 
-function Categories({ className }: { className?: string }) {
+async function Categories({ className }: { className?: string }) {
+  const categories = await fetchCategories();
+
   return (
     <div className={`${className}`}>
       <h1 className="text-xl font-extarbold">Popular Categoies</h1>
       <div className="mt-2 flex items-center justify-between  gap-4">
-        <CategoryItem title="Coding" image="/coding.png" bgColor="#5e4fff31" />
-        <CategoryItem
-          title="Fashion"
-          image="/fashion.png"
-          bgColor="#da85c731"
-        />
-        <CategoryItem title="Food" image="/food.png" bgColor="#7fb88133" />
-        <CategoryItem title="Style" image="/style.png" bgColor="#57c4ff31" />
-        <CategoryItem title="Travel" image="/travel.png" bgColor="#ff795736" />
-        <CategoryItem
-          title="Culture"
-          image="/culture.png"
-          bgColor="#ffb04f45"
-        />
-        {/**
-         .category.style {
-  background-color: #57c4ff31;
-}
-
-.category.fashion {
-  background-color: #da85c731;
-}
-
-.category.food {
-  background-color: #7fb88133;
-}
-
-.category.travel {
-  background-color: #ff795736;
-}
-
-.category.culture {
-  background-color: #ffb04f45;
-}
-
-.category.coding {
-  background-color: #5e4fff31;
-}
-
-         */}
+        {categories?.map((category) => {
+          return (
+            <CategoryItem
+              key={category.id}
+              title={category.title}
+              image={category.image}
+            />
+          );
+        })}
       </div>
     </div>
   );
