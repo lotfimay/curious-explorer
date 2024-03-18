@@ -20,11 +20,11 @@ export const Blog = ({
   className,
 }: BlogProps) => {
   return (
-    <div className={`flex items-center gap-5 w-[70%] ${className}`}>
-      <div className="relative rounded-md h-[200px] w-[300px]">
-        <Image src="/p1.jpeg" alt="" fill className="object-cover rounded-md" />
+    <div className={`flex items-center gap-5 ${className}`}>
+      <div className="relative h-full min-w-[250px]">
+        <Image src="/p1.jpeg" alt="" fill className="object-cover" />
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="max-w-[500px] flex flex-col gap-2">
         <div>
           <h1 className="text-xl font-extrabold">{title}</h1>
           <p className="text-xs text-soft-foreground">
@@ -35,7 +35,9 @@ export const Blog = ({
         <p className="text-soft-foreground">
           {description.substring(0, 200)} ...
         </p>
-        <Button className="w-fit">Read more</Button>
+        <Button variant="link" className="p-0 w-fit">
+          Read more
+        </Button>
       </div>
     </div>
   );
@@ -49,7 +51,8 @@ interface BlogListProps {
 function BlogList({ blogs, className }: BlogListProps) {
   return (
     <ul className={`${className} flex flex-col gap-2`}>
-      {blogs && blogs.map((blog) => <Blog {...blog} key={blog.id.toString()} />)}
+      {blogs &&
+        blogs.map((blog) => <Blog {...blog} key={blog.id.toString()} />)}
     </ul>
   );
 }
