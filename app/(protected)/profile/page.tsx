@@ -1,11 +1,11 @@
 import React from "react";
 
-import { auth } from "@/auth";
-
-async function page() {
-  const session = await auth();
-
-  return <div>{JSON.stringify(session)}</div>;
+const page = () => {
+  return (
+    <div>
+      profile page
+    </div>
+  )
 }
 
 export default page;

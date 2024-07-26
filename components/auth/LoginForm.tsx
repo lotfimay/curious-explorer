@@ -1,77 +1,12 @@
-"use client";
-import React, { useEffect, useRef } from "react";
-
-import { useState, useTransition } from "react";
-
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Button } from "../ui/button";
-
-import {
-  Form,
-  FormControl,
-  FormLabel,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-
-import { Input } from "../ui/input";
-import { LoginSchema } from "@/validation/schemas";
-import { useForm } from "react-hook-form";
 import CardWrapper from "./CardWrapper";
-import FormError from "@/components/FormError";
-import FormSuccess from "@/components/FormSuccess";
-import { login } from "@/actions/auth";
-
-import { useSearchParams } from "next/navigation";
 
 function LoginForm() {
-  const searchParams = useSearchParams();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const urlError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use with different provider!"
-      : "";
-
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  useEffect(() => {
-    inputRef?.current?.focus();
-  }, []);
-
-  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    
-    setError("");
-    setSuccess("");
-
-    startTransition(() => {
-      login(values).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
-      });
-    });
-  };
-
   return (
     <CardWrapper
       headerLabel="Welcome back !"
-      backButtonLabel="Don't have an account ?"
-      backButtonUrl="/auth/register"
+      backButtonLabel="Choose a provider to connect !"
     >
-      <Form {...form}>
+      {/* <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
           <FormField
             control={form.control}
@@ -118,7 +53,7 @@ function LoginForm() {
             </Button>
           </div>
         </form>
-      </Form>
+      </Form> */}
     </CardWrapper>
   );
 }

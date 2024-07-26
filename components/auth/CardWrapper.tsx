@@ -1,5 +1,4 @@
-import React from "react";
-
+"use client";
 import {
   Card,
   CardContent,
@@ -14,8 +13,8 @@ import { useRouter } from "next/navigation";
 
 interface CardWrapperProps {
   headerLabel: string;
-  children: React.ReactNode;
-  backButtonLabel: string;
+  children?: React.ReactNode;
+  backButtonLabel?: string;
   backButtonUrl?: string;
 }
 
@@ -41,7 +40,7 @@ function CardWrapper({
           <Button
             variant="link"
             className="w-fit m-auto"
-            onClick={() => router.push(backButtonUrl || "/")}
+            onClick={() => router.push(backButtonUrl || "/auth/login")}
           >
             {backButtonLabel}
           </Button>

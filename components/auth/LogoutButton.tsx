@@ -1,11 +1,10 @@
 import React from "react";
-import { signOut } from "@/auth";
+import { signOut } from "next-auth/react";
 
 function LogoutButton() {
   return (
     <form
       action={async () => {
-        "use server";
         await signOut();
       }}
       className="cursor-pointer"

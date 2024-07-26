@@ -1,13 +1,11 @@
-import React from "react";
-
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth";
 import UserMenu from "../auth/UserMenu";
 import { userMenuItems } from "@/constants";
 
 async function Links() {
-  const session = await auth();
+  const session = await getServerSession();
   return (
     <ul className="flex items-center justify-between font-semibold gap-10">
       <li className="flex items-center justify-center">
@@ -27,7 +25,7 @@ async function Links() {
         <UserMenu
           label="Account"
           items={userMenuItems}
-          userImage={session.user.image}
+          userImage={session.user?.image || ''}
         />
       )}
     </ul>
