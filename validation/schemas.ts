@@ -19,4 +19,5 @@ export const BlogSchema = z.object({
   description: z.string({
     required_error: "Please enter the blog details",
   }),
+  image: z.string().optional(),
 });
