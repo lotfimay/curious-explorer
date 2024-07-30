@@ -50,7 +50,7 @@ model Session {
 
 model VerificationToken {
   id      String   @id @default(cuid())
-  email   String
+  email   String @unique
   token   String   @unique
   expires DateTime
 
@@ -62,13 +62,13 @@ model Post {
   title       String
   description String
   posted_at   DateTime  @default(now())
-  userId      String
-  categoryId  String
+  userEmail      String
+  categoryTitle  String
   image       String?
-  views       Int
+  views       Int @default(0)
   comments    Comment[]
-  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category  @relation(fields: [categoryTitle], references: [title], onDelete: Cascade)
+  user        User      @relation(fields: [userEmail], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -82,8 +82,7 @@ model Comment {
 }
 
 model Category {
-  id    String @id @default(cuid())
-  title String
+  title String @id
   image String
   posts Post[]
 }
