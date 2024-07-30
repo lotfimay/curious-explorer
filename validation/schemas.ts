@@ -12,12 +12,16 @@ export const RegisterSchema = z.object({
 });
 
 export const BlogSchema = z.object({
-  title: z.string({ required_error: "Please enter a title" }),
+  title: z
+    .string({ required_error: "Please enter a title" })
+    .min(1, "Please enter a title"),
   category: z
     .string({ required_error: "Please select a category" })
-    .min(1, "The category is required"),
-  description: z.string({
-    required_error: "Please enter the blog details",
-  }),
+    .min(1, "Please select a category"),
+  description: z
+    .string({
+      required_error: "Please enter the blog details",
+    })
+    .min(1, "Please enter the blog details"),
   image: z.string().optional(),
 });

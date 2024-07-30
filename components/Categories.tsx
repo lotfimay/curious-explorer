@@ -47,7 +47,7 @@ async function Categories({ className }: { className?: string }) {
         {categories?.map((category) => {
           return (
             <CategoryItem
-              key={category.id}
+              key={category.title}
               title={category.title}
               image={category.image}
             />

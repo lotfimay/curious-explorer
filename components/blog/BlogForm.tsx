@@ -94,7 +94,7 @@ const BlogForm = () => {
                       //disabled={isPending}
                     />
                   </FormControl>
-                  <FormMessage className="ml-6" />
+                  {<FormMessage className="ml-6 text-red-500" />}
                 </FormItem>
               )}
             />
@@ -107,7 +107,7 @@ const BlogForm = () => {
         <FormField
           control={form.control}
           name="category"
-          render={({ field, fieldState }) => (
+          render={({ field }) => (
             <FormItem>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
@@ -136,7 +136,7 @@ const BlogForm = () => {
                   </SelectItem>
                 </SelectContent>
               </Select>
-              {fieldState.isTouched && <FormMessage className="ml-6" />}
+              {<FormMessage className="ml-6 text-red-500" />}
             </FormItem>
           )}
         />
@@ -192,14 +192,14 @@ const BlogForm = () => {
             <button
               type="button"
               onClick={handleRemoveImage}
-              className="absolute top-[-4] right-[0] bg-transparent p-1 z-10"
+              className="absolute top-0 right-0 bg-transparent p-1 z-10"
             >
               <Image src="/remove.png" alt="Remove" width={32} height={32} />
             </button>
             <img
               src={imagePreview}
               alt="Image Preview"
-              className="h-64 w-64 object-cover"
+              className="h-64 w-64 object-contain"
             />
           </div>
         )}
@@ -215,7 +215,7 @@ const BlogForm = () => {
                 value={field.value}
                 placeholder="Tell your story..."
               />
-              <FormMessage />
+              {<FormMessage className="ml-6 text-red-500" />}
             </FormItem>
           )}
         />
