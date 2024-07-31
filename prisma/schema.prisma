@@ -62,13 +62,13 @@ model Post {
   title       String
   description String
   posted_at   DateTime  @default(now())
-  userEmail      String
+  userId      String
   categoryTitle  String
   image       String?
   views       Int @default(0)
   comments    Comment[]
   category    Category  @relation(fields: [categoryTitle], references: [title], onDelete: Cascade)
-  user        User      @relation(fields: [userEmail], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {

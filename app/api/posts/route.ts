@@ -44,11 +44,11 @@ export const POST = async (req: NextRequest) => {
   }
 
   try {
-    const email = session.user?.email || "";
+    const id = session.user?.id;
     const data = await req.json();
     const post = await db.post.create({
       data: {
-        userEmail: email,
+        userId: id,
         ...data,
       },
     });
