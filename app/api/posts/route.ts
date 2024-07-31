@@ -6,8 +6,8 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
 
-  const page = searchParams.get("page");
-  const cat = searchParams.get("cat");
+  const page = searchParams.get("page") || "1";
+  const cat = searchParams.get("cat") || "style";
 
   const POST_PER_PAGE = 3;
 
