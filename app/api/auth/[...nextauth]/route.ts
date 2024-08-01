@@ -4,7 +4,6 @@ import Google from "next-auth/providers/google";
 
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from "@/lib/db";
-import { findUserByEmail } from "@/data/user";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -18,6 +17,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET ?? "",
     }),
   ],
+  session: { strategy: "jwt" },
   events: {
     linkAccount: async ({ user }) => {
       await db.user.update({
@@ -29,10 +29,16 @@ export const authOptions: NextAuthOptions = {
         },
       });
     },
+  },
+  callbacks: {
     session: async ({ session, token }) => {
-      if (session.user && token.sub) {
+      if (token.sub) {
         session.user.id = token.sub;
       }
+      return session;
+    },
+    jwt: async ({ token }) => {
+      return token;
     },
   },
 };

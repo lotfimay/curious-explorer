@@ -19,7 +19,9 @@ export const ThemeContext = createContext({
 });
 
 export const ThemeContextProvider = ({ children }: any) => {
-  const [theme, setTheme] = useState<string>(() => getThemeFromLocalStorage());
+  const [theme, setTheme] = useState<string>(
+    () => getThemeFromLocalStorage() || "light"
+  );
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");

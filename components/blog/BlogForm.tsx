@@ -46,16 +46,56 @@ const BlogForm = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const uploadImage = async () => {
+    if (imageFile) {
+      const storage = getStorage(app);
+      const upload = () => {
+        const name = new Date().getTime() + imageFile.name;
+        const storageRef = ref(storage, name);
+
+        const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {},
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              form.setValue("image", downloadURL);
+            });
+          }
+        );
+      };
+    }
+  };
+
   const handleRemoveImage = () => {
     setImageFile(null);
     setImagePreview(null);
   };
 
-  const handleSubmit = (values: z.infer<typeof BlogSchema>) => {
-    if (imageFile) {
-      console.log(imageFile);
-    }
-    console.log(values);
+  const slugify = (str: string) =>
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const handleSubmit = async (values: z.infer<typeof BlogSchema>) => {
+    await uploadImage();
   };
 
   useEffect(() => {
