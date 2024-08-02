@@ -41,7 +41,7 @@ function PopularTopics({ topics, className }: PopularTopicsProps) {
       {topics && (
         <ul className="flex flex-col mt-8 gap-6">
           {topics.map((topic) => (
-            <li>
+            <li key={topic.id}>
               <Topic {...topic} key={topic.id.toString()} />
             </li>
           ))}

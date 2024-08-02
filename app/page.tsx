@@ -15,8 +15,6 @@ export default function Home({
       ? parseInt(searchParams["page"])
       : 1;
 
-  console.log(page);
-
   const topics = [
     {
       id: 1,
@@ -52,9 +50,9 @@ export default function Home({
     <>
       <Featured />
       <Categories className="mt-4" />
-      <div className="flex justify-between mt-4 gap-2">
-        <BlogList className="flex-4" page={page} />
-        <PopularTopics topics={topics} className="flex-3" />
+      <div className="flex mt-4">
+        <BlogList className="flex-1" page={page} />
+        <PopularTopics topics={topics} className="" />
       </div>
     </>
   );

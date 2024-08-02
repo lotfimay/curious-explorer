@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
-export const POST_PER_PAGE = 4;
+export const POST_PER_PAGE = 3;
 
 export const GET = async (req: NextRequest) => {
   console.log("Heeere");

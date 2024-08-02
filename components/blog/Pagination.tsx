@@ -11,24 +11,25 @@ interface PaginationProps {
 const Pagination = ({ page, hasNext, hasPrevious }: PaginationProps) => {
   const router = useRouter();
   return (
-    <div className="flex items-center justify-between gap-4">
-      {hasPrevious && (
+    <div className="flex items-center justify-around gap-4 w-full">
+      {
         <Button
-          onClick={() => router.push(`?page=${page - 1}`)}
-          className="bg-red-500"
+          onClick={() => router.push(`?page=${page - 1}`, { scroll: false })}
+          className="bg-red-500 w-fit"
+          disabled={!hasPrevious}
         >
           {"<"} Previous
         </Button>
-      )}
-      <p>{page.toString()}</p>
-      {hasNext && (
+      }
+      {
         <Button
-          onClick={() => router.push(`?page=${page + 1}`)}
-          className="bg-green-500"
+          onClick={() => router.push(`?page=${page + 1}`, { scroll: false })}
+          className="bg-green-500 w-fit"
+          disabled={!hasNext}
         >
           Next {">"}
         </Button>
-      )}
+      }
     </div>
   );
 };

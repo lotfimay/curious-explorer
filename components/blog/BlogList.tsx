@@ -9,10 +9,13 @@ import { POST_PER_PAGE } from "@/app/api/posts/route";
 const getBlogs = async (page: number, cat?: string) => {
   try {
     const response = await fetch(
-      `${baseUrl}/api/posts?page=${page}&cat=${cat || ""}`
+      `${baseUrl}/api/posts?page=${page}&cat=${cat || ""}`,
+      {
+        method: "GET",
+        cache: "no-cache",
+      }
     );
     const data = await response.json();
-    console.log("Data : ", data);
     return data;
   } catch (error) {
     return Error("Something went wrong");
@@ -46,7 +49,7 @@ export const Blog = ({
   className,
 }: BlogProps) => {
   return (
-    <div className={`flex items-center gap-5 ${className}`}>
+    <li className={`w-full flex items-center gap-5 ${className}`} key={id}>
       <div className="relative h-full min-w-[250px]">
         <Image src="/p1.jpeg" alt="" fill className="object-cover" />
       </div>
@@ -66,7 +69,7 @@ export const Blog = ({
           Read more
         </Button>
       </div>
-    </div>
+    </li>
   );
 };
 
@@ -82,8 +85,8 @@ async function BlogList({ page, category, className }: BlogListProps) {
   const hasNext = Number(page) * POST_PER_PAGE < count;
   const hasPrevious = Number(page) > 1;
   return (
-    <div className="flex flex-col gap-8">
-      <ul className={`${className} flex flex-col gap-2`}>
+    <div className={`flex flex-col gap-8 ${className}`}>
+      <ul className={`flex flex-col gap-2`}>
         {blogs &&
           blogs.map((blog: any) => (
             <Blog
