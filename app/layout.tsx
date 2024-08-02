@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { ThemeContextProvider, ThemeProvider } from "@/context/ThemeContext";
 import NavBar from "@/components/navbar/NavBar";
-import  SessionProvider from "@/context/SessionProvider";
+import SessionProvider from "@/context/SessionProvider";
 import { getServerSession } from "next-auth";
+
+import { ThemeProvider } from "@/components/theme-provider";
 
 const poppins = Poppins({
   weight: ["600"],
@@ -23,17 +24,23 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession();
   return (
-    <html lang="en">
-      <ThemeContextProvider>
-        <ThemeProvider className={poppins.className}>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={poppins.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SessionProvider session={session}>
-          <div className="px-10">
-            <NavBar className="m-8" />
-            {children}
-          </div>
+            <div className="px-10">
+              <NavBar className="m-8" />
+              {children}
+            </div>
           </SessionProvider>
         </ThemeProvider>
-      </ThemeContextProvider>
+      </body>
     </html>
   );
 }

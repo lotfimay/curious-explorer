@@ -5,6 +5,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export const POST_PER_PAGE = 4;
 
 export const GET = async (req: NextRequest) => {
+  console.log("Heeere");
   const { searchParams } = new URL(req.url);
 
   const session = await getServerSession(authOptions);

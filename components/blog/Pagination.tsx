@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 interface PaginationProps {
   page: number;
@@ -12,21 +13,21 @@ const Pagination = ({ page, hasNext, hasPrevious }: PaginationProps) => {
   return (
     <div className="flex items-center justify-between gap-4">
       {hasPrevious && (
-        <button
+        <Button
           onClick={() => router.push(`?page=${page - 1}`)}
-          className="hover:underline"
+          className="bg-red-500"
         >
           {"<"} Previous
-        </button>
+        </Button>
       )}
       <p>{page.toString()}</p>
       {hasNext && (
-        <button
+        <Button
           onClick={() => router.push(`?page=${page + 1}`)}
-          className="hover:underline"
+          className="bg-green-500"
         >
           Next {">"}
-        </button>
+        </Button>
       )}
     </div>
   );

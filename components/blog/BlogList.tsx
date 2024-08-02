@@ -12,6 +12,7 @@ const getBlogs = async (page: number, cat?: string) => {
       `${baseUrl}/api/posts?page=${page}&cat=${cat || ""}`
     );
     const data = await response.json();
+    console.log("Data : ", data);
     return data;
   } catch (error) {
     return Error("Something went wrong");
@@ -28,6 +29,7 @@ interface BlogProps {
   id: string;
   title: string;
   description: string;
+  category: string;
   image?: string;
   posted_at?: Date;
   user: User;
@@ -37,6 +39,7 @@ export const Blog = ({
   id,
   title,
   description,
+  category,
   image,
   user,
   posted_at,
@@ -50,6 +53,7 @@ export const Blog = ({
       <div className="max-w-[500px] flex flex-col gap-2">
         <div>
           <h1 className="text-xl font-extrabold">{title}</h1>
+          <h2>{category}</h2>
           <p className="text-xs text-soft-foreground">
             posted by <span className="font-extrabold">@{user.name}</span>, At{" "}
             {moment(posted_at).format("MMMM Do YYYY, h:mm a")}
@@ -80,7 +84,18 @@ async function BlogList({ page, category, className }: BlogListProps) {
   return (
     <div className="flex flex-col gap-8">
       <ul className={`${className} flex flex-col gap-2`}>
-        {blogs && blogs.map((blog: any) => <Blog {...blog} key={blog} />)}
+        {blogs &&
+          blogs.map((blog: any) => (
+            <Blog
+              id={blog.id}
+              title={blog.title}
+              description={blog.description}
+              category={blog.categoryTitle}
+              user={blog.user}
+              posted_at={blog.posted_at}
+              key={blog.id}
+            />
+          ))}
       </ul>
       <div className="flex items-center justify-center">
         <Pagination hasNext={hasNext} hasPrevious={hasPrevious} page={page} />
