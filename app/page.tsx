@@ -50,7 +50,7 @@ export default function Home({
     <>
       <Featured />
       <Categories className="mt-4" />
-      <div className="flex mt-4">
+      <div className="flex my-4">
         <BlogList className="flex-1" page={page} />
         <PopularTopics topics={topics} className="" />
       </div>

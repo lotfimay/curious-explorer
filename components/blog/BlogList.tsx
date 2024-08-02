@@ -50,7 +50,7 @@ export const Blog = ({
 }: BlogProps) => {
   return (
     <li className={`w-full flex items-center gap-5 ${className}`} key={id}>
-      <div className="relative h-full min-w-[250px]">
+      <div className="relative h-[200px] min-w-[250px]">
         <Image src="/p1.jpeg" alt="" fill className="object-cover" />
       </div>
       <div className="max-w-[500px] flex flex-col gap-2">
@@ -85,24 +85,23 @@ async function BlogList({ page, category, className }: BlogListProps) {
   const hasNext = Number(page) * POST_PER_PAGE < count;
   const hasPrevious = Number(page) > 1;
   return (
-    <div className={`flex flex-col gap-8 ${className}`}>
-      <ul className={`flex flex-col gap-2`}>
-        {blogs &&
-          blogs.map((blog: any) => (
-            <Blog
-              id={blog.id}
-              title={blog.title}
-              description={blog.description}
-              category={blog.categoryTitle}
-              user={blog.user}
-              posted_at={blog.posted_at}
-              key={blog.id}
-            />
-          ))}
-      </ul>
-      <div className="flex items-center justify-center">
-        <Pagination hasNext={hasNext} hasPrevious={hasPrevious} page={page} />
-      </div>
+    <div className={`${className}`}>
+      <Pagination hasNext={hasNext} hasPrevious={hasPrevious} page={page}>
+        <ul className={`flex flex-col gap-2`}>
+          {blogs &&
+            blogs.map((blog: any) => (
+              <Blog
+                id={blog.id}
+                title={blog.title}
+                description={blog.description}
+                category={blog.categoryTitle}
+                user={blog.user}
+                posted_at={blog.posted_at}
+                key={blog.id}
+              />
+            ))}
+        </ul>
+      </Pagination>
     </div>
   );
 }
