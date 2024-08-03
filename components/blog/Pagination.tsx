@@ -1,12 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 
 interface PaginationProps {
   page: number;
   hasNext: boolean;
   hasPrevious: boolean;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const Pagination = ({
@@ -15,22 +15,37 @@ const Pagination = ({
   hasPrevious,
   children,
 }: PaginationProps) => {
+  const pathName = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleNextClick = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", (page + 1).toString());
+    router.push(`${pathName}?${params.toString()}`, { scroll: false });
+  };
+
+  const handlePreviousClick = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", (page - 1).toString());
+    router.push(`${pathName}?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="flex flex-col gap-8">
       {children}
       <div className="flex items-center justify-around gap-4 w-full">
         <Button
-          onClick={() => router.push(`?page=${page - 1}`, { scroll: false })}
-          className="bg-red-500 w-fit"
+          onClick={() => handlePreviousClick()}
+          className="bg-red-500 w-fit hover:bg-red-300"
           disabled={!hasPrevious}
         >
           {"<"} Previous
         </Button>
 
         <Button
-          onClick={() => router.push(`?page=${page + 1}`, { scroll: false })}
-          className="bg-green-500 w-fit"
+          onClick={() => handleNextClick()}
+          className="bg-green-500 w-fit hover:bg-green-300"
           disabled={!hasNext}
         >
           Next {">"}

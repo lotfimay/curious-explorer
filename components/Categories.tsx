@@ -25,9 +25,10 @@ const CategoryItem = ({ title, image }: CategoRyItemProps) => {
   const bgColor = categoryColors[title.toLowerCase()] || "#ff795736";
   return (
     <Link
-      href="/"
+      href={`/?page=1&cat=${title}`}
       className={`flex-1 flex items-center justify-center bg-[${bgColor}] rounded-md gap-1 py-2 px-1`}
       style={{ backgroundColor: bgColor }}
+      scroll={false}
     >
       <div className="relative w-[32px] h-[32px]">
         <Image src={image} alt="" fill className="object-cover rounded-full" />

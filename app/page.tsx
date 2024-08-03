@@ -1,4 +1,5 @@
 import BlogList from "@/components/blog/BlogList";
+import RecentBlogs from "@/components/blog/RecentBlogs";
 import Categories from "@/components/Categories";
 import Featured from "@/components/Featured";
 import PopularTopics from "@/components/PopularTopics";
@@ -14,6 +15,9 @@ export default function Home({
     searchParams["page"] && typeof searchParams["page"] === "string"
       ? parseInt(searchParams["page"])
       : 1;
+
+  const cat =
+    typeof searchParams["cat"] === "string" ? searchParams["cat"] : "";
 
   const topics = [
     {
@@ -51,7 +55,7 @@ export default function Home({
       <Featured />
       <Categories className="mt-4" />
       <div className="flex my-4">
-        <BlogList className="flex-1" page={page} />
+        <RecentBlogs className="flex-1" page={page} category={cat} />
         <PopularTopics topics={topics} className="" />
       </div>
     </>

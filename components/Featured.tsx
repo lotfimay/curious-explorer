@@ -11,7 +11,7 @@ function Featured({ className }: { className?: string }) {
         and creative ideas
       </h1>
       <div className="flex items-center gap-10 mt-4">
-        <div className="h-[400px] flex-1 bg-red-500 relative">
+        <div className="h-[400px] flex-1 relative">
           <Image src="/p1.jpeg" alt="" fill className="object-cover" />
         </div>
         <div className="flex flex-col gap-6 w-1/2">

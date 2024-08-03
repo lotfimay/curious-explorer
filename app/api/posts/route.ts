@@ -5,13 +5,13 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export const POST_PER_PAGE = 3;
 
 export const GET = async (req: NextRequest) => {
-  console.log("Heeere");
   const { searchParams } = new URL(req.url);
-
   const session = await getServerSession(authOptions);
   const isAuthenticated =
     session != null ||
     req.headers.get("user-agent") === "PostmanRuntime/7.40.0";
+
+  console.log("get blogs");
 
   // if (!isAuthenticated) {
   //   return new NextResponse(
@@ -42,7 +42,12 @@ export const GET = async (req: NextRequest) => {
 
   try {
     const [posts, count] = await db.$transaction([
-      db.post.findMany(query),
+      db.post.findMany({
+        ...query,
+        orderBy: {
+          posted_at: "desc",
+        },
+      }),
       db.post.count({ where: query.where }),
     ]);
     return new NextResponse(JSON.stringify({ posts, count }), { status: 200 });
