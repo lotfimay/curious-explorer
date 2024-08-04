@@ -11,7 +11,6 @@ export const GET = async (req: NextRequest) => {
     session != null ||
     req.headers.get("user-agent") === "PostmanRuntime/7.40.0";
 
-  console.log("get blogs");
 
   // if (!isAuthenticated) {
   //   return new NextResponse(

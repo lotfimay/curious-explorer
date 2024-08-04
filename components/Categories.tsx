@@ -26,7 +26,7 @@ const CategoryItem = ({ title, image }: CategoRyItemProps) => {
   return (
     <Link
       href={`/?page=1&cat=${title}`}
-      className={`flex-1 flex items-center justify-center bg-[${bgColor}] rounded-md gap-1 py-2 px-1`}
+      className={`flex-1 flex items-center justify-center rounded-md gap-1 py-2 px-1`}
       style={{ backgroundColor: bgColor }}
       scroll={false}
     >
