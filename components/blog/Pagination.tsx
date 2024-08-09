@@ -37,7 +37,7 @@ const Pagination = ({
       <div className="flex items-center justify-around gap-4 w-full">
         <Button
           onClick={() => handlePreviousClick()}
-          className="bg-red-500 w-fit hover:bg-red-300"
+          className="bg-red-500 w-fit hover:bg-red-300 text-foreground"
           disabled={!hasPrevious}
         >
           {"<"} Previous
@@ -45,7 +45,7 @@ const Pagination = ({
 
         <Button
           onClick={() => handleNextClick()}
-          className="bg-green-500 w-fit hover:bg-green-300"
+          className="bg-green-500 w-fit hover:bg-green-300 text-foreground"
           disabled={!hasNext}
         >
           Next {">"}

@@ -6,6 +6,7 @@ import SessionProvider from "@/context/SessionProvider";
 import { getServerSession } from "next-auth";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   weight: ["600"],
@@ -39,6 +40,7 @@ export default async function RootLayout({
               {children}
             </div>
           </SessionProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

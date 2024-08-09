@@ -11,6 +11,9 @@ export const RegisterSchema = z.object({
   password: z.string().min(6, "The password must contains 6 caracters or more"),
 });
 
+export const MAX_FILE_SIZE = 1024 * 1024 * 5;
+export const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
+
 export const BlogSchema = z.object({
   title: z
     .string({ required_error: "Please enter a title" })
@@ -23,5 +26,10 @@ export const BlogSchema = z.object({
       required_error: "Please enter the blog details",
     })
     .min(1, "Please enter the blog details"),
-  image: z.string().optional(),
+  image: z
+    .any()
+    .refine((file: File) => !!file, "File is required")
+    .refine((file) => {
+      return file?.size <= MAX_FILE_SIZE;
+    }, "Max size is 5MB."),
 });

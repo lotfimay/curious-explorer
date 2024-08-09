@@ -11,7 +11,6 @@ export const GET = async (req: NextRequest) => {
     session != null ||
     req.headers.get("user-agent") === "PostmanRuntime/7.40.0";
 
-
   // if (!isAuthenticated) {
   //   return new NextResponse(
   //     JSON.stringify({ message: "User  not authenticated" }),
@@ -75,13 +74,14 @@ export const POST = async (req: NextRequest) => {
   try {
     const id = (session && session.user?.id) || "";
     const data = await req.json();
+    console.log(data);
     const post = await db.post.create({
       data: {
-        userId: id,
-        ...data,
-      },
+        userId : id,
+        ...data
+      }
     });
-    return new NextResponse(JSON.stringify(post), { status: 200 });
+    return new NextResponse(JSON.stringify(post), { status: 201 });
   } catch (error) {
     console.error(error);
     return new NextResponse(

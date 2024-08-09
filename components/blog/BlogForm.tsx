@@ -1,110 +1,22 @@
 "use client";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-
-import Image from "next/image";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { app } from "@/lib/firebase";
-
+import { Form, FormField } from "@/components/ui/form";
 import { Button } from "../ui/button";
-
 import { BlogSchema } from "@/validation/schemas";
-
 import * as z from "zod";
-
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.bubble.css";
-
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-
+import { useForm } from "react-hook-form";
+import FilePicker from "../FilePicker";
+import DescriptionEditor from "./DescriptionEditor";
+import InputField from "../InputField";
+import { baseUrl } from "@/constants";
+import { useToast } from "../ui/use-toast";
+import { categories } from "@/constants";
+import SelectionField from "../SelectionField";
+import { upload } from "@/data/image-upload";
 const BlogForm = () => {
-  const [open, setOpen] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  const uploadImage = async () => {
-    if (imageFile) {
-      const storage = getStorage(app);
-      const upload = () => {
-        const name = new Date().getTime() + imageFile.name;
-        const storageRef = ref(storage, name);
-
-        const uploadTask = uploadBytesResumable(storageRef, imageFile);
-
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-            switch (snapshot.state) {
-              case "paused":
-                console.log("Upload is paused");
-                break;
-              case "running":
-                console.log("Upload is running");
-                break;
-            }
-          },
-          (error) => {},
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              form.setValue("image", downloadURL);
-            });
-          }
-        );
-      };
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
-  };
-
-  const slugify = (str: string) =>
-    str
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-  const handleSubmit = async (values: z.infer<typeof BlogSchema>) => {
-    await uploadImage();
-  };
-
-  useEffect(() => {
-    if (imageFile) {
-      setImagePreview(URL.createObjectURL(imageFile));
-    } else {
-      setImagePreview(null);
-    }
-  }, [imageFile]);
+  console.log("Renderning the blog add form");
 
   const form = useForm<z.infer<typeof BlogSchema>>({
     resolver: zodResolver(BlogSchema),
@@ -112,9 +24,46 @@ const BlogForm = () => {
       title: "",
       description: "",
       category: "",
-      image: "",
     },
+    mode: "onTouched",
   });
+
+  const handleSubmit = async (values: z.infer<typeof BlogSchema>) => {
+    try {
+      const imageFile = values.image;
+      const imageUrl = await upload("posts", imageFile);
+      const data = {
+        title: values.title,
+        description: values.description,
+        image: imageUrl,
+        categoryTitle: values.category,
+      };
+      const req = await fetch(`${baseUrl}/api/posts`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      const status = req.status;
+      if (status === 201) {
+        toast({
+          title: data.title,
+          description: "Your blog has been created successfully",
+        });
+      } else {
+        toast({
+          title: data.title,
+          description:
+            "Something went wrong when creating when uploading your blog",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        description:
+          "Something went wrong when creating when uploading your blog",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Form {...form}>
@@ -125,17 +74,7 @@ const BlogForm = () => {
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Title"
-                      {...field}
-                      className="border-none outline-none p-6 text-3xl focus-visible:ring-0 shadow-none text-current placeholder:text-[#b3b3b1]"
-                      //disabled={isPending}
-                    />
-                  </FormControl>
-                  {<FormMessage className="ml-6 text-red-500" />}
-                </FormItem>
+                <InputField field={field} placeholder="Title" type="text" />
               )}
             />
           </div>
@@ -148,116 +87,22 @@ const BlogForm = () => {
           control={form.control}
           name="category"
           render={({ field }) => (
-            <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="ml-5 p-6">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="style" className="cursor-pointer">
-                    Style
-                  </SelectItem>
-                  <SelectItem value="fashion" className="cursor-pointer">
-                    Fashion
-                  </SelectItem>
-                  <SelectItem value="food" className="cursor-pointer">
-                    Food
-                  </SelectItem>
-                  <SelectItem value="culture" className="cursor-pointer">
-                    Culture
-                  </SelectItem>
-                  <SelectItem value="travel" className="cursor-pointer">
-                    Travel
-                  </SelectItem>
-                  <SelectItem value="coding" className="cursor-pointer">
-                    Coding
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {<FormMessage className="ml-6 text-red-500" />}
-            </FormItem>
+            <SelectionField
+              field={field}
+              options={categories}
+              placeholder="Select a category"
+            />
           )}
         />
-        <div className="flex gap-5 relative">
-          <button
-            className="w-9 h-9 rounded-full bg-transparent border border-current flex items-center justify-center cursor-pointer"
-            onClick={() => setOpen(!open)}
-          >
-            <Image src="/add.png" alt="" width={16} height={16} />
-          </button>
-          {open && (
-            <div className="flex gap-5 bg-[var(--bg)] absolute z-999 left-12">
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="hidden"
-                        id="image"
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            setImageFile(e.target.files[0]);
-                          }
-                        }}
-                        //disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage className="ml-6" />
-                  </FormItem>
-                )}
-              />
-              <Label
-                htmlFor="image"
-                className="w-9 h-9 rounded-full bg-transparent border border-[#1a8917] flex items-center justify-center cursor-pointer"
-              >
-                <Image src="/image.png" alt="" width={16} height={16} />
-              </Label>
-              <button className="w-9 h-9 rounded-full bg-transparent border border-[#1a8917] flex items-center justify-center cursor-pointer">
-                <Image src="/external.png" alt="" width={16} height={16} />
-              </button>
-              <button className="w-9 h-9 rounded-full bg-transparent border border-[#1a8917] flex items-center justify-center cursor-pointer">
-                <Image src="/video.png" alt="" width={16} height={16} />
-              </button>
-            </div>
-          )}
-        </div>
-        {imagePreview && (
-          <div className="w-fit relative">
-            <button
-              type="button"
-              onClick={handleRemoveImage}
-              className="absolute top-0 right-0 bg-transparent p-1 z-10"
-            >
-              <Image src="/remove.png" alt="Remove" width={32} height={32} />
-            </button>
-            <img
-              src={imagePreview}
-              alt="Image Preview"
-              className="h-64 w-64 object-contain"
-            />
-          </div>
-        )}
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => <FilePicker field={field} />}
+        />
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
-            <FormItem>
-              <ReactQuill
-                className="w-full p-6"
-                theme="bubble"
-                onChange={field.onChange}
-                value={field.value}
-                placeholder="Tell your story..."
-              />
-              {<FormMessage className="ml-6 text-red-500" />}
-            </FormItem>
-          )}
+          render={({ field }) => <DescriptionEditor field={field} />}
         />
       </form>
     </Form>

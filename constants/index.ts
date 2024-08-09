@@ -18,4 +18,13 @@ export const categoryColors: CategoryColors = {
   travel: "#ff795736",
 };
 
+export const categories = [
+  { label: "Style", value: "style" },
+  { label: "Fashion", value: "fashion" },
+  { label: "Food", value: "food" },
+  { label: "Culture", value: "culture" },
+  { label: "Travel", value: "travel" },
+  { label: "Coding", value: "coding" },
+];
+
 export const baseUrl = "http://localhost:3000";
