@@ -13,10 +13,11 @@ import { useToast } from "../ui/use-toast";
 import { categories } from "@/constants";
 import SelectionField from "../SelectionField";
 import { upload } from "@/data/image-upload";
+import { slugify } from "@/lib/utils";
+import { findPostBySlug } from "@/data/post";
+
 const BlogForm = () => {
   const { toast } = useToast();
-
-  console.log("Renderning the blog add form");
 
   const form = useForm<z.infer<typeof BlogSchema>>({
     resolver: zodResolver(BlogSchema),
@@ -30,10 +31,21 @@ const BlogForm = () => {
 
   const handleSubmit = async (values: z.infer<typeof BlogSchema>) => {
     try {
+      const slug = slugify(values.title);
+      const existedPost = await findPostBySlug(slug);
+      if (existedPost) {
+        toast({
+          title: values.title,
+          description: "a blog with the exact title already exists",
+          variant: "destructive",
+        });
+        return;
+      }
       const imageFile = values.image;
       const imageUrl = await upload("posts", imageFile);
       const data = {
         title: values.title,
+        slug: slug,
         description: values.description,
         image: imageUrl,
         categoryTitle: values.category,
@@ -51,15 +63,13 @@ const BlogForm = () => {
       } else {
         toast({
           title: data.title,
-          description:
-            "Something went wrong when creating when uploading your blog",
+          description: "Something went wrong when your blog",
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        description:
-          "Something went wrong when creating when uploading your blog",
+        description: "Something went wrong when uploading your blog",
         variant: "destructive",
       });
     }

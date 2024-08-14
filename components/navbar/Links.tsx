@@ -5,7 +5,7 @@ import UserMenu from "../auth/UserMenu";
 import { userMenuItems } from "@/constants";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-const Links = async() => {
+const Links = async () => {
   const session = await getServerSession(authOptions);
   return (
     <ul className="flex items-center justify-between font-semibold gap-10">
@@ -25,19 +25,19 @@ const Links = async() => {
       ) : (
         <>
           <li>
-            <Link href="/new">New blog</Link>
+            <Link href="/write">Write</Link>
           </li>
           <li>
-                    <UserMenu
-                    label="Account"
-                    items={userMenuItems}
-                    userImage={session.user?.image || ''}
-                    />
+            <UserMenu
+              label="Account"
+              items={userMenuItems}
+              userImage={session.user?.image || ""}
+            />
           </li>
-          </>
+        </>
       )}
     </ul>
   );
-}
+};
 
 export default Links;

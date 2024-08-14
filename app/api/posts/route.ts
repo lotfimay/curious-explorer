@@ -72,21 +72,23 @@ export const POST = async (req: NextRequest) => {
   }
 
   try {
-    const id = (session && session.user?.id) || "";
+    const id = session && session.user?.id;
     const data = await req.json();
     console.log(data);
     const post = await db.post.create({
       data: {
-        userId : id,
-        ...data
-      }
+        userId: id,
+        ...data,
+      },
     });
     return new NextResponse(JSON.stringify(post), { status: 201 });
   } catch (error) {
     console.error(error);
     return new NextResponse(
       JSON.stringify({ message: "Something went wrong" }),
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 };
