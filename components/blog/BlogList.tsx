@@ -62,6 +62,7 @@ async function BlogList({ page, category, className }: BlogListProps) {
               <Blog
                 id={blog.id}
                 title={blog.title}
+                slug={blog.slug}
                 description={blog.description}
                 category={blog.categoryTitle}
                 user={blog.user}
