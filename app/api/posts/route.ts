@@ -60,6 +60,8 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
 
+  // postman allowed just for testing
+
   const isAuthenticated =
     session != null ||
     req.headers.get("user-agent") === "PostmanRuntime/7.40.0";
