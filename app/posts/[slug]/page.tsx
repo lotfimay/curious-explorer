@@ -4,6 +4,8 @@ import moment from "moment";
 import { Button } from "@/components/ui/button";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import CommentsList from "@/components/comments/CommentsList";
+
 const getData = async (slug: string) => {
   try {
     const post = await db.post.findUnique({
@@ -24,7 +26,6 @@ const BlogPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
   const session = await getServerSession(authOptions);
   const data = await getData(slug);
-
   const isBlogAuthor = session?.user.id === data?.user.id;
 
   return (
@@ -65,9 +66,9 @@ const BlogPage = async ({ params }: { params: { slug: string } }) => {
             className="prose prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: data?.description || "" }}
           />
-          {/* <div className="mt-12">
-            <Comments postSlug={slug} />
-          </div> */}
+          <div className="mt-12">
+            <CommentsList postSlug={data?.slug || ""} />
+          </div>
         </div>
         {/* <div className="flex-none">
           <Menu />

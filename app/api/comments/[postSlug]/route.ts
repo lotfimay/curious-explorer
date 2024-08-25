@@ -1,18 +1,20 @@
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 interface RouteParams {
-  params: { postId: string };
+  params: { postSlug: string };
 }
 
 export const GET = async (req: NextRequest, { params }: RouteParams) => {
   try {
-    const { postId } = params;
+    const { postSlug } = params;
     const comments = await db.comment.findMany({
       where: {
-        postId: postId,
+        post: {
+          slug: postSlug,
+        },
       },
       include: {
         user: true,
@@ -29,7 +31,7 @@ export const GET = async (req: NextRequest, { params }: RouteParams) => {
 
 export const POST = async (req: NextRequest, { params }: RouteParams) => {
   try {
-    const { postId } = params;
+    const { postSlug } = params;
     const session = await getServerSession(authOptions);
     const isAuthenticated = session !== null;
     if (!isAuthenticated) {
@@ -38,12 +40,13 @@ export const POST = async (req: NextRequest, { params }: RouteParams) => {
         { status: 401 }
       );
     }
+    const post = await db.post.findUnique({ where: { slug: postSlug } });
     const data = await req.json();
-    const userId = session && session.user?.id;
+    const userId = session.user?.id;
     const newComment = await db.comment.create({
       data: {
+        postId: post?.id,
         userId: userId,
-        postId: postId,
         ...data,
       },
     });
